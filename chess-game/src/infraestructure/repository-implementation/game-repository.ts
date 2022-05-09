@@ -9,13 +9,16 @@ import Player from '../../core/entities/player';
 @injectable()
 //export default class GameRepository extends Repository<Game, GameEntity> implements IGameRepository{
 export default class GameRepository extends Repository<Game> implements IGameRepository{
-    public async create(): Promise<Game> {
+    public async create(game: Game): Promise<Game> {
         let newGame = new Promise<Game>((resolve: (arg0: game) => void) => {
-            const newGame = new Game(new Board(), new Player('white'), new Player('black'));
-            console.log(newGame);
-            resolve(newGame);
-        })
+            resolve(game);
+        });
         return newGame;
     }
-
+    public async update(id: string, game: game): Promise<game> {
+        let newGame = new Promise<Game>((resolve: (arg0: game) => void) => {
+            resolve(game);
+        });
+        return newGame;
+    }
 }

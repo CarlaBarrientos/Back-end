@@ -1,24 +1,24 @@
 import "reflect-metadata";
 import express from 'express';
 import bodyParser from 'body-parser';
-import Game from './core/entities/game';
-import Board from './core/entities/board';
-import GameService from './core/service/game-service';
-import GameRepository from "./infraestructure/repository-implementation/game-repository";
+import { DbConnection } from "./infraestructure/database/database";
+import './infraestructure/controllers/game.controller';
+import { InversifyExpressServer } from "inversify-express-utils";
+import { container } from './core/service/inversify';
 
 const app = express();
-//require("./infraestructure/database/database");
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+// let dbConnection = new DbConnection();
+// dbConnection.connect();app.use(bodyParser.urlencoded({ extended: false }));
+// app.use(bodyParser.json());
 
 const port = 3000;
 
-app.get('/', async (request, response) => {
-    let service = new GameService(new GameRepository);
-    const newGame = await service.createGame();
-    console.log('here');
-    console.log(newGame);
-    response.send(newGame);
-});
-
-app.listen(port, () => console.log(`server listening on ${port}`));
+let server =  new InversifyExpressServer(container, null, {rootPath: '/api'}, app);
+server.setConfig((app) => {
+    app.use(bodyParser.urlencoded({
+      extended: true
+    }));
+    app.use(bodyParser.json());
+  });
+let appConfigured = server.build();
+appConfigured.listen(port || 3000, () => console.log(`App running on ${port}`));
