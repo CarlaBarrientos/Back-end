@@ -1,0 +1,30 @@
+{
+  "name": "typescript-test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "tsc && node dist/index.js",
+    "start-ts-node": "npx ts-node ./src",
+    "start-nodemon": "tsc && nodemon dist/index.js",
+    "lint": "eslint . --ext .ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.20.0",
+    "express": "^4.17.3",
+    "inversify": "^6.0.1",
+    "mongodb": "^4.5.0",
+    "reflect-metadata": "^0.1.13",
+    "rxjs": "^7.5.5",
+    "ts-node": "^10.7.0"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.13",
+    "@typescript-eslint/eslint-plugin": "^5.19.0",
+    "@typescript-eslint/parser": "^5.19.0",
+    "eslint": "^8.13.0"
+  }
+}
