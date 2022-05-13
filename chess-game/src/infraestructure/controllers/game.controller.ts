@@ -6,17 +6,15 @@ import Game from '../../core/entities/game';
 
 @controller("/game")
 export default class GameController implements interfaces.Controller {
-    private currentGame;
-    private _gameService;
+    private _gameService!: GameService;
     constructor() {
-        this._gameService = new GameService(new GameRepository);  
-        this.currentGame = new Game(); 
+        //this._gameService = new GameService(new GameRepository);  
     }
     @httpGet("/")
     public async startGame (@request() req: express.Request, @response() res: express.Response) {
         try {
-        this.currentGame = await this._gameService.createGame(this.currentGame);
-        res.status(200).json(this.currentGame);
+        const newGame = await this._gameService.createGame();
+        res.status(201).json(newGame);
         } catch(error) {
         res.status(400).json(error);
         }
@@ -24,8 +22,8 @@ export default class GameController implements interfaces.Controller {
     @httpGet("/:id")
     public async getCurrentGame (@requestParam("id") id: string, @request() req: express.Request, @response() res: express.Response) {
         try {
-        this.currentGame = await this._gameService.getGame(this.currentGame);
-        res.status(200).json(this.currentGame);
+        const currentGame = await this._gameService.getGame();
+        res.status(200).json(currentGame);
         } catch(error) {
         res.status(400).json(error);
         }
@@ -33,7 +31,7 @@ export default class GameController implements interfaces.Controller {
     @httpPut("/:id")
     public async restartGame (@requestParam("id") id: string, @request() req: express.Request, @response() res: express.Response) {
         try {
-        const game = await this._gameService.restartGame(this.currentGame);
+        const game = await this._gameService.restartGame();
         res.status(200).json(game);
         } catch(error) {
         res.status(400).json(error);
@@ -43,10 +41,9 @@ export default class GameController implements interfaces.Controller {
     public async joinGame (@request() req: express.Request, @response() res: express.Response) {
         try {
         const newPlayer = req.body;
-        console.log(newPlayer);
-        this.currentGame = await this._gameService.joinGame(this.currentGame, newPlayer);
-        console.log(this.currentGame);
-        res.status(200).json(this.currentGame);
+        const currentGame = await this._gameService.joinGame(newPlayer);
+        console.log(currentGame);
+        res.status(200).json(currentGame.getPlayers());
         } catch(error) {
         res.status(400).json(error);
         }

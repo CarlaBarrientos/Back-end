@@ -32,14 +32,20 @@ export default class Game {
         this.players = [];
     }
 
-    // getBoard(): Board {
-    //     return this.board;
-    // }
     getPlayers() {
         return this.players;
     }
+
     setPlayers (player: Player) {
         this.players.push(player);
+    }
+
+    setStatus(status: GameStatus) {
+        this.status = status;
+    }
+
+    getStatus() {
+        return this.status;
     }
 
     initBoard(): Position[] [] {
