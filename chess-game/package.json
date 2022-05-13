@@ -6,7 +6,7 @@
   "scripts": {
     "start": "tsc && node dist/index.js",
     "start-ts-node": "npx ts-node ./src",
-    "start-nodemon": "tsc && nodemon dist/index.js",
+    "start-nodemon": "nodemon -e ts -w ./src -x npm run start",
     "lint": "eslint . --ext .ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
