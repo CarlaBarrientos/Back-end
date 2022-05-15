@@ -7,5 +7,17 @@ export default abstract class Piece {
         private readonly name: PieceName
     ){}
     
+    getColor() {
+        return this.color;
+    }
+
+    getStatus() {
+        return this.status;
+    }
+
+    getName() {
+        return this.name;
+    }
+    
     abstract canMove(initialPosition: Position, finalPosition: Position): boolean;
 }

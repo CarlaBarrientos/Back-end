@@ -19,4 +19,8 @@ export default class Position {
         return this.piece;
     }
 
+    setPiece(piece: Piece | null) {
+        this.piece = piece;
+    }
+
 }

@@ -3,6 +3,8 @@ import Position from "./position";
 
 export default class Rook extends Piece {
     canMove(initialPosition: Position, finalPosition: Position): boolean {
-        return false;
+        return initialPosition.getRow() === finalPosition.getRow() 
+        || initialPosition.getColumn() === finalPosition.getColumn() 
+        ? true : false ;
     }
 }
