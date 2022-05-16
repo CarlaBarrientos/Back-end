@@ -1,17 +1,17 @@
 import Player from './player';
 import Position from './position';
 export default class Move {
-    constructor(private player: Player, private initialPosition: Position, private endPosition: Position) {}
+    constructor(private player: Player, private startPosition: Position, private endPosition: Position) {}
 
     getPlayer(){
         return this.player;
     }
 
-    getInitialPos() {
-        return this.initialPosition;
+    getStartPosition() {
+        return this.startPosition;
     }
 
-    getEndPos() {
+    getEndPosition() {
         return this.endPosition;
     }
 }
