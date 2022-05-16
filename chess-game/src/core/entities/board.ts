@@ -17,6 +17,16 @@ export default class Board{
         return this.board;
     }
 
+    movePiece(startPosition: Position, endPosition: Position) {
+        const startRow = startPosition.getRow() - 1;
+        const endRow = endPosition.getRow() - 1;
+        const startColumn = Number(Object.keys(column).find(k=>column[k] === startPosition.getColumn()));
+        const endColumn = Number(Object.keys(column).find(k=>column[k] === endPosition.getColumn()));
+        const piece = this.board[startRow][startColumn].getPiece();
+        this.board[endRow][endColumn].setPiece(piece);
+        this.board[startRow][startColumn].setPiece(null);
+    }
+
     initBoard(): Position[][] {
         for (let i = 0; i < 8; i++) {
             this.board[i] = [];

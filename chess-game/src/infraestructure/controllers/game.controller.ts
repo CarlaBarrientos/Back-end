@@ -1,11 +1,9 @@
 import * as express from 'express';
 import { interfaces, controller, httpGet, httpPost, request, response, httpPut, requestParam } from "inversify-express-utils";
-import GameService from '../../core/service/game.service';
-import GameRepository from '../repository-implementation/game.repository';
 import Game from '../../core/entities/game';
 import { IGameService } from '../../core/service-interface/igame.service';
 import { inject } from 'inversify';
-import { TYPES, column } from '../../core/entities/types';
+import { TYPES } from '../../core/entities/types';
 import Player from '../../core/entities/player';
 import Move from '../../core/entities/move';
 import Position from '../../core/entities/position';

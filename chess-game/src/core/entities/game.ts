@@ -61,38 +61,4 @@ export default class Game {
         this.currentTurn = 'white';
         this.status = 'ready';
     }
-
-    checkPiece(position: Position) {
-        const col = Number(Object.keys(row).find(k=>column[k]===position.getColumn()));
-        if(this.board.getBoard()[position.getRow()-1][col].getPiece() !== null){
-            return true;
-        };
-        return false;
-    }
-
-    checkEmpty(position: Position) {
-        const col = Number(Object.keys(row).find(k=>column[k]===position.getColumn()));
-        if(this.board.getBoard()[position.getRow()-1][col].getPiece() === null){
-            return true;
-        };
-        return false;
-    }
-
-    checkMove(initialPosition: Position, endPosition: Position) {
-        const endCol = Number(Object.keys(row).find(k=>column[k]===endPosition.getColumn()));
-        const initialCol = Number(Object.keys(row).find(k=>column[k]===initialPosition.getColumn()));
-        ;
-        if(this.checkPiece(initialPosition) && this.checkEmpty(endPosition)
-        && this.canMove(this.board.getBoard()[initialPosition.getRow()-1][initialCol].getPiece(), initialPosition, endPosition)) {
-            this.board.getBoard()[endPosition.getRow()-1][endCol].setPiece(initialPosition.getPiece());
-            this.board.getBoard()[initialPosition.getRow()-1][initialCol].setPiece(null);
-            this.currentTurn = this.currentTurn === 'white' ? 'black' : 'white';
-            return true;
-        }
-        return false;
-    }
-
-    canMove(piece: Piece | null, initialPosition: Position, endPosition: Position) {
-        return piece?.canMove(initialPosition, endPosition);
-    }
 }

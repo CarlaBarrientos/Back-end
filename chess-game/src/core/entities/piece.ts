@@ -1,3 +1,4 @@
+import Board from "./board";
 import Position from "./position";
 import { Color, PieceName, PieceStatus } from "./types";
 export default abstract class Piece {
@@ -19,5 +20,5 @@ export default abstract class Piece {
         return this.name;
     }
     
-    abstract canMove(initialPosition: Position, finalPosition: Position): boolean;
+    abstract canMove(board: Board, initialPosition: Position, finalPosition: Position): boolean;
 }

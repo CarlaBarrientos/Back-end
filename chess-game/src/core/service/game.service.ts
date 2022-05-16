@@ -1,11 +1,13 @@
 import { inject, injectable } from 'inversify';
 import Game from '../entities/game';
-import { TYPES } from '../entities/types';
+import { Color, column, row, TYPES } from '../entities/types';
 import { IGameService } from '../service-interface/igame.service';
 import IGameRepository from '../repository-interface/igame.repository';
 import Player from '../entities/player';
 import Move from '../entities/move';
 import Board from '../entities/board';
+import Piece from '../entities/piece';
+import Position from '../entities/position';
 
 @injectable()
 export default class GameService implements IGameService {
@@ -48,15 +50,19 @@ export default class GameService implements IGameService {
     }
 
     public async movePiece(move: Move, game: Game): Promise<Game> {
+        const initialColumn = Number(Object.keys(column).find(k=>column[k] === move.getStartPosition().getColumn()));
+        let piece = game.getBoard().getBoard()[move.getStartPosition().getRow()-1][initialColumn].getPiece();
         if(game.getStatus() === 'playing' || game.getStatus() === 'ready'){
-            if(move.getPlayer().getColor() === game.getCurrentTurn()) {
-                if(game.checkMove(move.getStartPosition(), move.getEndPosition())) {
+            if(this.checkTurn(move.getPlayer().getColor(), game.getCurrentTurn())) {
+                if(this.pieceCanMove(piece , game.getBoard(), move.getStartPosition(), move.getEndPosition())) {
+                    game.getBoard().movePiece(move.getStartPosition(), move.getEndPosition());//quizá falte el setter de board
                     game.setMoves(move);
                     game.setStatus('playing');
+                    game.setCurrentTurn(game.getCurrentTurn() === 'white' ? 'black' : 'white');
                     return this._gameRepository.update(game);
                 } else {
                     return new Promise<Game>((resolve, reject)=>{
-                        reject('Move not valid.');
+                        reject('Move not valid!');
                     });
                 }
             } else {
@@ -70,5 +76,13 @@ export default class GameService implements IGameService {
             });
         }
         
+    }
+
+    checkTurn(playerColor: Color, currentTurn: Color) {
+        return playerColor === currentTurn ? true : false;
+    }
+
+    pieceCanMove(piece: Piece | null, board: Board, initialPosition: Position, endPosition: Position) {
+        return piece?.canMove(board, initialPosition, endPosition);
     }
 } 
