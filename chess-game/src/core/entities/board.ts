@@ -34,6 +34,10 @@ export default class Board{
                 this.board[i][j] = new Position(column[j], row[i], null);
             }
         }
+        return this.board;
+    }
+
+    initGame() {
 
         this.board[0][0] = new Position('A', 1, new Rook('white','alive', 'rook'));
         this.board[0][1] = new Position('B', 1, new Knight('white','alive', 'knight'));
@@ -68,7 +72,5 @@ export default class Board{
         this.board[7][5] = new Position('F', 8, new Bishop('black','alive', 'bishop'));
         this.board[7][6] = new Position('G', 8, new Knight('black','alive', 'knight'));
         this.board[7][7] = new Position('H', 8, new Rook('black','alive', 'rook'));
-
-        return this.board;
     }
 }

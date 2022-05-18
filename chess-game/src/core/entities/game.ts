@@ -11,6 +11,7 @@ export default class Game {
     private moves: Move[];
     constructor(private status: GameStatus = 'waiting', private currentTurn: Color = 'white') {
         this.board = new Board();
+        this.board.initGame();
         this.players = [];
         this.moves = [];
     }
@@ -58,6 +59,7 @@ export default class Game {
     restartGame() {
         this.moves = [];
         this.board = new Board();
+        this.board.initGame();
         this.currentTurn = 'white';
         this.status = 'ready';
     }

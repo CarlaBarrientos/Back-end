@@ -55,7 +55,7 @@ export default class GameService implements IGameService {
         if(game.getStatus() === 'playing' || game.getStatus() === 'ready'){
             if(this.checkTurn(move.getPlayer().getColor(), game.getCurrentTurn())) {
                 if(this.pieceCanMove(piece , game.getBoard(), move.getStartPosition(), move.getEndPosition())) {
-                    game.getBoard().movePiece(move.getStartPosition(), move.getEndPosition());//quizá falte el setter de board
+                    game.getBoard().movePiece(move.getStartPosition(), move.getEndPosition());
                     game.setMoves(move);
                     game.setStatus('playing');
                     game.setCurrentTurn(game.getCurrentTurn() === 'white' ? 'black' : 'white');

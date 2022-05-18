@@ -6,7 +6,7 @@ import { column } from "./types";
 export default class Rook extends Piece {
 
     canMove(board: Board, startPosition: Position, endPosition: Position): boolean {
-        if(this.validEndPosition(endPosition) && this.isValidMove(startPosition, endPosition) && !this.isBlocked(board, startPosition, endPosition))
+        if(this.validEndPosition(board, endPosition) && this.isValidMove(startPosition, endPosition) && !this.isBlocked(board, startPosition, endPosition))
             return true;
         return false;
     }
@@ -41,10 +41,11 @@ export default class Rook extends Piece {
         return false;
     }
 
-    validEndPosition(endPosition: Position): boolean {
-        if(endPosition.getPiece()?.getColor() !== this.getColor() || endPosition.getPiece() === null)//falta lógica para comer
-            return true;
-        return false;
+    validEndPosition(board: Board, endPosition: Position): boolean {
+        const endRow = endPosition.getRow();
+        const endColumn = Number(Object.keys(column).find(k=>column[k] === endPosition.getColumn()));
+        return board.getBoard()[endRow-1][endColumn].getPiece()?.getColor() !== this.getColor() 
+        || board.getBoard()[endRow-1][endColumn].getPiece() === null;
     }
 
     isValidMove(startPosition: Position, endPosition: Position): boolean {
