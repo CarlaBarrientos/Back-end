@@ -7,14 +7,11 @@ export default class Game {
     private board: Board;
     private players: Player[];
     private moves: Move[];
+    
     constructor(private status: GameStatus = 'waiting', private currentTurn: Color = 'white') {
         this.board = new Board();
         this.players = [];
         this.moves = [];
-    }
-
-    setBoard(board: Board) {
-        this.board = board;
     }
 
     getBoard() {
@@ -37,25 +34,22 @@ export default class Game {
         return this.status;
     }
 
-    setCurrentTurn(color: Color) {
-        this.currentTurn = color;
+    changeCurrentTurn() {
+        this.currentTurn = this.currentTurn === 'white' ? 'black' : 'white';
     }
 
-    getCurrentTurn() {
-        return this.currentTurn;
+    isCurrentTurn(turn: Color) {
+        return this.currentTurn === turn;
     }
 
-    setMoves(move: Move) {
+    addMove(move: Move) {
         this.moves.push(move);
-    }
-
-    getMoves() {
-        return this.moves;
     }
 
     restartGame() {
         this.moves = [];
         this.board = new Board();
+        this.board.fillBoardWithPieces();
         this.currentTurn = 'white';
         this.status = 'playing';
     }

@@ -2,9 +2,6 @@ import { injectable } from 'inversify';
 import game from '../../core/entities/game';
 import Game from '../../core/entities/game';
 import IGameRepository from '../../core/repository-interface/igame.repository';
-import Player from '../../core/entities/player';
-import { PieceEntity } from '../database/entities/piece';
-import { myDataSource } from '../database/database';
 
 @injectable()
 export default class GameRepository implements IGameRepository{

@@ -1,6 +1,6 @@
 import { inject, injectable } from 'inversify';
 import Game from '../entities/game';
-import { Color, column, row, TYPES } from '../entities/types';
+import { Color, TYPES } from '../entities/types';
 import { IGameService } from '../service-interface/igame.service';
 import IGameRepository from '../repository-interface/igame.repository';
 import Player from '../entities/player';
@@ -8,6 +8,7 @@ import Move from '../entities/move';
 import Board from '../entities/board';
 import Piece from '../entities/piece';
 import Position from '../entities/position';
+import { CanNotJoinError, SameColorPlayersError, IncorrectTurnError, GameNotReadyError, MissingPieceError } from './errors/errors';
 
 @injectable()
 export default class GameService implements IGameService {
@@ -28,61 +29,73 @@ export default class GameService implements IGameService {
     }
 
     public async joinGame(player: Player, game: Game): Promise<Game> {
-        if(game.getStatus() === 'waiting') {
-            if(game.getPlayers().length === 0){
-                game.setPlayers(player);
-                return this._gameRepository.update(game);
-            } else if(game.getPlayers().length === 1 && game.getPlayers()[0].getColor() !== player.getColor()) {
-                game.setPlayers(player);
-                game.setCurrentTurn(game.getPlayers()[0].getColor() === 'white' ? game.getPlayers()[0].getColor() : game.getPlayers()[1].getColor());
-                game.setStatus('ready');
-                return this._gameRepository.update(game);
-            } else {
-                return new Promise<Game>((resolve, reject) => {
-                    reject('You can not add both players of the same color!');
-                });
-            }
+        this.checkGameIsWaiting(game);
+
+        if(game.getPlayers().length === 1) {
+            this.checkPlayerColor(game, player);
+            game.addPlayer(player);
+            game.setStatus('playing');
+            game.getBoard().fillBoardWithPieces();
         } else {
-            return new Promise<Game>((resolve, reject) => {
-                reject('The game is in progress you can not add more players.');
-            });
-        }        
+            game.addPlayer(player);
+        }
+
+        return this._gameRepository.update(game);
     }
 
     public async movePiece(move: Move, game: Game): Promise<Game> {
-        const initialColumn = Number(Object.keys(column).find(k=>column[k] === move.getStartPosition().getColumn()));
-        let piece = game.getBoard().getBoard()[move.getStartPosition().getRow()-1][initialColumn].getPiece();
-        if(game.getStatus() === 'playing' || game.getStatus() === 'ready'){
-            if(this.checkTurn(move.getPlayer().getColor(), game.getCurrentTurn())) {
-                if(this.pieceCanMove(piece , game.getBoard(), move.getStartPosition(), move.getEndPosition())) {
-                    game.getBoard().movePiece(move.getStartPosition(), move.getEndPosition());
-                    game.setMoves(move);
-                    game.setStatus('playing');
-                    game.setCurrentTurn(game.getCurrentTurn() === 'white' ? 'black' : 'white');
-                    return this._gameRepository.update(game);
-                } else {
-                    return new Promise<Game>((resolve, reject)=>{
-                        reject('Move not valid!');
-                    });
-                }
-            } else {
-                return new Promise<Game>((resolve, reject)=>{
-                    reject('It is not your turn.');
-                });
-            }
-        } else {
-            return new Promise<Game>((resolve, reject)=>{
-                reject('Game is not ready.');
-            });
-        }
+        const startPosition = move.getStartPosition();
+        const endPosition = move.getEndPosition();
+        const piece = this.getPiece(startPosition, game);
+
+        this.checkeGameIsPlaying(game);
+        this.checkTurn(move.getPlayer().getColor(), game);
         
+        if(piece.canMove(endPosition)) {
+            piece.moveTo(endPosition);
+            game.changeCurrentTurn();
+            game.addMove(move);
+        }
+
+        return this._gameRepository.update(game);    
     }
 
-    checkTurn(playerColor: Color, currentTurn: Color) {
-        return playerColor === currentTurn ? true : false;
+    getPiece(startPosition: Position, game: Game): Piece{
+        const currentBoard: Board = game.getBoard();
+        const piece = currentBoard.getPieces().find((piece) =>
+            piece.getPosition().getRow() === startPosition.getRow()
+            && piece.getPosition().getColumn() === startPosition.getColumn()
+        );
+
+        if(piece === undefined) {
+            throw new MissingPieceError();
+        }
+
+        return piece;
     }
 
-    pieceCanMove(piece: Piece | null, board: Board, initialPosition: Position, endPosition: Position) {
-        return piece?.canMove(board, initialPosition, endPosition);
+    checkeGameIsPlaying(game: Game) {
+        if(game.getStatus() !== 'playing'){
+            throw new GameNotReadyError()
+        }
     }
+
+    checkGameIsWaiting(game: Game){
+        if(game.getStatus() !== 'waiting') {
+            throw new CanNotJoinError(); 
+        }
+    }
+
+    checkPlayerColor(game: Game, player: Player) {
+        if(game.getPlayers()[0].getColor() === player.getColor()) {
+            throw new SameColorPlayersError();
+        }
+    }
+
+    checkTurn(playerColor: Color, game: Game) {
+        if(!game.isCurrentTurn(playerColor)) {
+            throw new IncorrectTurnError();
+        }
+    }
+
 } 

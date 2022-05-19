@@ -5,10 +5,12 @@ import './infraestructure/controllers/game.controller';
 import { InversifyExpressServer } from "inversify-express-utils";
 import { container } from './core/service/inversify';
 import { DbConnection } from "./infraestructure/database/database";
+import { errorHandler } from "./core/service/errors/error.handler";
 
 const app = express();
 //new DbConnection().initializeDb();
 app.use(bodyParser.json());
+app.use(errorHandler);
 
 const port = 3000;
 

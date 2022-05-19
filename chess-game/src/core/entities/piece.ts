@@ -2,7 +2,6 @@ import Board from "./board";
 import Position from "./position";
 import { Color, PieceName, Row, Column } from './types';
 export default abstract class Piece {
-
     protected position: Position;
 
     constructor(
@@ -19,13 +18,13 @@ export default abstract class Piece {
         return this.color;
     }
 
-    getName() {
-        return this.name;
+    getPosition() {
+        return this.position;
     }
 
     moveTo(position: Position) {
         this.position = position;
     }
     
-    abstract canMove(board: Board, initialPosition: Position, finalPosition: Position): boolean;
+    abstract canMove(endPosition: Position): boolean;
 }
