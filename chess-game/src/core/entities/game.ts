@@ -1,8 +1,6 @@
 import Player from './player';
-import { Column, GameStatus, Row, Color, row, column } from './types';
-import Position from './position';
+import { GameStatus, Color } from './types';
 import Move from './move';
-import Piece from './piece';
 import Board from './board';
 
 export default class Game {
@@ -11,7 +9,6 @@ export default class Game {
     private moves: Move[];
     constructor(private status: GameStatus = 'waiting', private currentTurn: Color = 'white') {
         this.board = new Board();
-        this.board.initGame();
         this.players = [];
         this.moves = [];
     }
@@ -24,7 +21,7 @@ export default class Game {
         return this.board;
     }
 
-    setPlayers (player: Player) {
+    addPlayer (player: Player) {
         this.players.push(player);
     }
 
@@ -59,8 +56,7 @@ export default class Game {
     restartGame() {
         this.moves = [];
         this.board = new Board();
-        this.board.initGame();
         this.currentTurn = 'white';
-        this.status = 'ready';
+        this.status = 'playing';
     }
 }
