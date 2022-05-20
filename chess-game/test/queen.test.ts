@@ -6,90 +6,85 @@ import Pawn from '../src/core/entities/pawn';
 describe('Queen', () => {
     let board: Board;
     let queen: Queen;
-    let queen1: Queen;
     beforeEach(() => {
         board = new Board();
-        queen = new Queen('white', 'alive', 'queen');
-        queen1 = new Queen('white', 'alive', 'queen')
-        board.getBoard()[3][3] = new Position('D', 4, queen);
-        // board.getBoard()[3][4] = new Position('E', 4, new Pawn('white', 'alive', 'pawn'));
-        board.getBoard()[5][5] = new Position('F', 6, new Pawn('black', 'alive', 'pawn'));
-        // board.getBoard()[6][5] = new Position('F', 7, queen);
-        board.getBoard()[6][3] = new Position('D', 7, new Pawn('white', 'alive', 'pawn'));
-        board.getBoard()[6][6] = new Position('G', 7, new Pawn('white', 'alive', 'pawn'));
-        board.getBoard()[3][6] = new Position('G', 4, new Pawn('white', 'alive', 'pawn'));
-        board.getBoard()[1][5] = new Position('F', 2, new Pawn('white', 'alive', 'pawn'));
-        board.getBoard()[0][3] = new Position('D', 1, new Pawn('white', 'alive', 'pawn'));
-        board.getBoard()[1][1] = new Position('B', 2, new Pawn('white', 'alive', 'pawn'));
-        board.getBoard()[3][1] = new Position('B', 4, new Pawn('white', 'alive', 'pawn'));
-        board.getBoard()[5][1] = new Position('B', 6, new Pawn('white', 'alive', 'pawn'));
+        queen = new Queen('white', 'queen', 4, 'D');
+        board.addPiece(new Pawn('black', 'pawn', 6, 'F'));
+        board.addPiece(new Pawn('white', 'pawn', 7, 'D'));
+        board.addPiece(new Pawn('white', 'pawn', 7, 'G'));
+        board.addPiece(new Pawn('white', 'pawn', 4, 'G'));
+        board.addPiece(new Pawn('white', 'pawn', 3, 'F'));
+        board.addPiece(new Pawn('white', 'pawn', 1, 'D'));
+        board.addPiece(new Pawn('white', 'pawn', 2, 'B'));
+        board.addPiece(new Pawn('white', 'pawn', 4, 'B'));
+        board.addPiece(new Pawn('white', 'pawn', 6, 'B'));
     });
     
     it('should move up', () => {
-        expect(queen.canMove(board, new Position('D', 4, null), new Position('D', 6, null))).toBe(true);
+        expect(queen.canMove(board, new Position(6, 'D'))).toBe(true);
     });
 
     it('should move down', () => {
-        expect(queen.canMove(board, new Position('D', 4, null), new Position('D', 2, null))).toBe(true);
+        expect(queen.canMove(board, new Position(2, 'D'))).toBe(true);
     });
 
     it('should move right', () => {
-        expect(queen.canMove(board, new Position('D', 4, null), new Position('F', 4, null))).toBe(true);
+        expect(queen.canMove(board, new Position(4, 'F'))).toBe(true);
     });
 
     it('should move left', () => {
-        expect(queen.canMove(board, new Position('D', 4, null), new Position('C', 4, null))).toBe(true);
+        expect(queen.canMove(board, new Position(4, 'C'))).toBe(true);
     });
 
     it('should move diagonal left up', () => {
-        expect(queen.canMove(board, new Position('D', 4, null), new Position('C', 5, null))).toBe(true);
+        expect(queen.canMove(board, new Position(5, 'C'))).toBe(true);
     });
 
     it('should move diagonal left down', () => {
-        expect(queen.canMove(board, new Position('D', 4, null), new Position('C', 3, null))).toBe(true);
+        expect(queen.canMove(board, new Position(3, 'C'))).toBe(true);
     });
 
     it('should move diagonal right up', () => {
-        expect(queen.canMove(board, new Position('D', 4, null), new Position('E', 5, null))).toBe(true);
+        expect(queen.canMove(board, new Position(5, 'E'))).toBe(true);
     });
 
     it('should move diagonal right down', () => {
-        expect(queen.canMove(board, new Position('D', 4, null), new Position('E', 3, null))).toBe(true);
+        expect(queen.canMove(board, new Position(3, 'E'))).toBe(true);
     });
 
     it('should not move up if it is blocked by a white piece', () => {
-        expect(queen.canMove(board, new Position('D', 4, null), new Position('D', 8, null))).toBe(false);
+        expect(queen.canMove(board, new Position(8, 'D'))).toBe(false);
     });
 
     it('should not move down if it is blocked by a white piece', () => {
-        expect(queen.canMove(board, new Position('D', 4, null), new Position('D', 1, null))).toBe(false);
+        expect(queen.canMove(board, new Position(1, 'D'))).toBe(false);
     });
 
     it('should not move right if it is blocked by a white piece', () => {
-        expect(queen.canMove(board, new Position('D', 4, null), new Position('H', 4, null))).toBe(false);
+        expect(queen.canMove(board, new Position(4, 'H'))).toBe(false);
     });
 
     it('should not move left if it is blocked by a white piece', () => {
-        expect(queen.canMove(board, new Position('D', 4, null), new Position('A', 4, null))).toBe(false);
+        expect(queen.canMove(board, new Position(4, 'A'))).toBe(false);
     });
 
     it('should not move diagonal right up if it is blocked by a white piece', () => {
-        expect(queen.canMove(board, new Position('D', 4, null), new Position('H', 8, null))).toBe(false);
+        expect(queen.canMove(board, new Position(8, 'H'))).toBe(false);
     });
 
     it('should not move diagonal right down if it is blocked by a white piece', () => {
-        expect(queen.canMove(board, new Position('D', 4, null), new Position('G', 2, null))).toBe(false);
+        expect(queen.canMove(board, new Position(2, 'G'))).toBe(false);
     });
 
     it('should not move diagonal left up if it is blocked by a white piece', () => {
-        expect(queen.canMove(board, new Position('D', 4, null), new Position('A', 7, null))).toBe(false);
+        expect(queen.canMove(board, new Position(7, 'A'))).toBe(false);
     });
 
     it('should not move diagonal left down if it is blocked by a white piece', () => {
-        expect(queen.canMove(board, new Position('D', 4, null), new Position('A', 1, null))).toBe(false);
+        expect(queen.canMove(board, new Position(1, 'A'))).toBe(false);
     });
 
     it('should move to a place with a black piece', () => {
-        expect(queen.canMove(board, new Position('D', 4, null), new Position('F', 6, null))).toBe(true);
+        expect(queen.canMove(board, new Position(6, 'F'))).toBe(true);
     });
 });

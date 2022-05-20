@@ -20,43 +20,46 @@ export default class Rook extends Piece {
             distance = Math.abs(startRow - endRow);
             for (let i = 1; i < distance; i++)
             {
-                return this.invalidVerticalMove(board, endRow, i);
+                if(this.invalidVerticalMove(board, startRow, endRow, i)) {
+                    return true;
+                }
             }
         } else {
             distance = Math.abs(startColumn - endColumn);
             for (let i = 1; i < distance; i++)
             {
-                return this.invalidHorizontalMove(board, endColumn, i);
+                if(this.invalidHorizontalMove(board, startColumn, endColumn, i)) {
+                    return true;
+                }
             }
         }
-
         
         return false;
     }
 
-    invalidVerticalMove(board: Board, endRow: number, i: number) {
-        if(this.getPosition().getRow() > endRow) {
-            let row = this.getPosition().getRow() - i;
-            return board.getPiece(new Position(numberToRow[row], this.getPosition().getColumn())) !== null;
+    invalidVerticalMove(board:Board, startRow:number, endRow:number, i:number) {
+        if(startRow > endRow) {
+            let row = startRow - i;
+            return board.getPiece(new Position(numberToRow[row], this.getPosition().getColumn())) !== undefined;
         } else {
-            let row = this.getPosition().getRow() + i;
-            return board.getPiece(new Position(numberToRow[row], this.getPosition().getColumn())) !== null;
+            let row = startRow + i;
+            return board.getPiece(new Position(numberToRow[row], this.getPosition().getColumn())) !== undefined;
         }
     }
 
-    invalidHorizontalMove(board: Board, endColumn: number, i: number) {
-        if(this.getPosition().getColumn().charCodeAt(0) > endColumn) {
-            const column = this.getPosition().getColumn().charCodeAt(0) - i;
-            return board.getPiece(new Position(this.getPosition().getRow(), asciiToColumn[column])) !== null
+    invalidHorizontalMove(board:Board, startColumn:number, endColumn:number, i:number) {
+        if(startColumn > endColumn) {
+            const column = startColumn - i;
+            return board.getPiece(new Position(this.getPosition().getRow(), asciiToColumn[column])) !== undefined;
         } else {
-            const column = this.getPosition().getColumn().charCodeAt(0) + i;
-            return board.getPiece(new Position(this.getPosition().getRow(), asciiToColumn[column])) !== null;
+            const column = startColumn + i;
+            return board.getPiece(new Position(this.getPosition().getRow(), asciiToColumn[column])) !== undefined;
         }
     }
 
     validEndPosition(board: Board, endPosition: Position): boolean {
         return board.getPiece(endPosition)?.getColor() !== this.getColor() 
-        || board.getPiece(endPosition) === null;
+        || board.getPiece(endPosition) === undefined;
     }
 
     isValidMove(endPosition: Position): boolean {

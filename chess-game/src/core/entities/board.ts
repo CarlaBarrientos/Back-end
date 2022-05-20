@@ -22,6 +22,10 @@ export default class Board{
         return this.pieces.filter((piece) => piece.getColor() === 'white');
     }
 
+    setPieces(pieces: Piece[]) {
+        this.pieces = pieces;
+    }
+
     getPieces() {
         return this.pieces;
     }
@@ -49,7 +53,7 @@ export default class Board{
         this.addPiece(new Bishop('white', 'bishop', 1, 'F'));
         this.addPiece(new Knight('white', 'knight', 1, 'G'));
         this.addPiece(new Rook('white', 'rook', 1, 'H'));
-        this.addPiece(new Pawn('white', 'pawn', 2,'A'));
+        this.addPiece(new Pawn('white', 'pawn', 3,'A'));
         this.addPiece(new Pawn('white', 'pawn', 2,'B'));
         this.addPiece(new Pawn('white', 'pawn', 2,'C'));
         this.addPiece(new Pawn('white', 'pawn', 2,'D'));

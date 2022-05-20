@@ -48,3 +48,9 @@ export class MissingPieceError extends BaseError {
 		super('There is not any piece in the start position!', HttpStatusCode.BAD_REQUEST);
 	}
 }
+
+export class InvalidMove extends BaseError {
+	constructor() {
+		super('Invalid move!', HttpStatusCode.BAD_REQUEST);
+	}
+}

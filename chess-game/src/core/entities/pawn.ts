@@ -16,11 +16,11 @@ export default class Pawn extends Piece {
 
         if(startRow > endRow) {
             let row = startRow - 1;
-            if(board.getPiece(new Position(numberToRow[row], this.getPosition().getColumn())) !== null)
+            if(board.getPiece(new Position(numberToRow[row], this.getPosition().getColumn())) !== undefined)
                 return true;
         } else if(startRow < endRow) {
             let row = startRow + 1;
-            if(board.getPiece(new Position(numberToRow[row], this.getPosition().getColumn())) !== null)
+            if(board.getPiece(new Position(numberToRow[row], this.getPosition().getColumn())) !== undefined)
                 return true;
         }
 
@@ -28,7 +28,7 @@ export default class Pawn extends Piece {
     }
 
     validEndPosition(board: Board, endPosition: Position): boolean {
-        return board.getPiece(endPosition) === null;
+        return board.getPiece(endPosition) === undefined;
     }
 
     isValidMove(board: Board, endPosition: Position): boolean {
@@ -36,13 +36,15 @@ export default class Pawn extends Piece {
         const endRow = endPosition.getRow();
         const startColumn = this.getPosition().getColumn().charCodeAt(0);
         const endColumn = endPosition.getColumn().charCodeAt(0);
-        if(this.isFirstMove() && !this.isBlocked(board, endPosition)){
-            return (startColumn === endColumn) && (Math.abs(startRow - endRow) === 2 
-            || (Math.abs(startRow - endRow) === 1));
-        } else if(this.isEating(board, endPosition)) {
+        if(this.isEating(board, endPosition)) {
             return Math.abs(startRow - endRow) === 2 && Math.abs(startColumn - endColumn) === 2;
-        } else {
+        } else if(this.isFirstMove() && !this.isBlocked(board, endPosition)){
+            return (startColumn === endColumn) && (Math.abs(startRow - endRow) === 2 
+                    || (Math.abs(startRow - endRow) === 1));
+        } else if(!this.isBlocked(board, endPosition)) {
             return (startColumn === endColumn) && (Math.abs(startRow - endRow) === 1) 
+        } else {
+            return false;
         }
     }
 
@@ -51,7 +53,15 @@ export default class Pawn extends Piece {
     }
 
     isEating(board: Board, endPosition: Position): boolean {
-        return board.getPiece(endPosition)?.getColor() !== this.getColor()
-        || board.getPiece(endPosition)?.getColor() !== this.getColor();
+        if(this.getPosition().getColumn() !== endPosition.getColumn()) {
+            if(this.getPosition().getColumn().charCodeAt(0) > endPosition.getColumn().charCodeAt(0)){
+                return board.getPiece(new Position(numberToRow[endPosition.getRow() - 1], asciiToColumn[endPosition.getColumn().charCodeAt(0) + 1]))?.getColor() !== this.getColor();
+            } else {
+                return board.getPiece(new Position(numberToRow[endPosition.getRow() - 1], asciiToColumn[endPosition.getColumn().charCodeAt(0) - 1]))?.getColor() !== this.getColor();
+            }
+        } else {
+            return false;
+        }
+        
     }
 }

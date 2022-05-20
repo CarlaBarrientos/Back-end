@@ -10,7 +10,7 @@ export default class Knight extends Piece {
 
     validEndPosition(board: Board, endPosition: Position): boolean {
         return board.getPiece(endPosition)?.getColor() !== this.getColor() 
-        || board.getPiece(endPosition) === null;
+        || board.getPiece(endPosition) === undefined;
     }
 
     isValidMove(endPosition: Position): boolean {

@@ -13,13 +13,13 @@ export default class King extends Piece {
 
     isBlocked(board: Board, endPosition: Position): boolean {
         this.checkMate(board, endPosition);
-        return board.getPiece(endPosition) !== null 
+        return board.getPiece(endPosition) !== undefined 
         && board.getPiece(endPosition)?.getColor() !== this.getColor();
     }
 
     validEndPosition(board: Board, endPosition: Position): boolean {
         return board.getPiece(endPosition)?.getColor() !== this.getColor() 
-        || board.getPiece(endPosition) === null;
+        || board.getPiece(endPosition) === undefined;
     }
 
     isValidMove(endPosition: Position): boolean {

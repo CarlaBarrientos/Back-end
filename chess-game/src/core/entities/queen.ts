@@ -15,57 +15,93 @@ export default class Queen extends Piece {
         const startColumn = this.getPosition().getColumn().charCodeAt(0);
         const endColumn = endPosition.getColumn().charCodeAt(0);
         let distance;
-        if(Math.abs(startRow - endRow) ===  Math.abs(startColumn - endColumn))
+        if(Math.abs(startRow - endRow) ===  Math.abs(startColumn - endColumn)){
             distance = Math.abs(startRow - endRow);
-        else 
-            distance = Math.abs(startRow - endRow + startColumn - endColumn);
-
-        for (let i = 1; i < distance; i++)
-        {
-            if(startRow < endRow && startColumn === endColumn) {
-                let row = startRow + i;
-                if(board.getPiece(new Position(numberToRow[row], asciiToColumn[startColumn])) !== null)
+            if(endColumn > startColumn) {
+                for (let i = 1; i < distance; i++)
+                {
+                if(this.invalidRightDiagonalMove(board, startRow, startColumn, endRow, i)) {
                     return true;
-            } else if(startRow > endRow && startColumn === endColumn) {
-                let row = startRow - i;
-                if(board.getPiece(new Position(numberToRow[row], asciiToColumn[startColumn])) !== null)
+                }
+            }
+            } else {
+                for (let i = 1; i < distance; i++)
+                {
+                if(this.invalidLeftDiagonalMove(board, startRow, startColumn, endRow, i)) {
                     return true;
-            } else if(startRow === endRow && startColumn < endColumn) {
-                let col = startColumn + i;
-                if(board.getPiece(new Position(numberToRow[startRow], asciiToColumn[col])) !== null)
-                    return true;
-            } else if(startRow === endRow && startColumn > endColumn) {
-                let col = startColumn - i;
-                if(board.getPiece(new Position(numberToRow[startRow], asciiToColumn[col])) !== null)
-                    return true;
-            } else if(startRow < endRow && startColumn < endColumn) {
-                let row = startRow + i;
-                let col = startColumn + i;
-                if(board.getPiece(new Position(numberToRow[row], asciiToColumn[col])) !== null)
-                    return true;
-            } else if(startRow > endRow && startColumn > endColumn) {
-                let row = startRow - i;
-                let col = startColumn - i;
-                if(board.getPiece(new Position(numberToRow[row], asciiToColumn[col])) !== null)
-                    return true;
-            } else if(startRow > endRow && startColumn < endColumn) {
-                let col = startColumn + i;
-                let row = startRow - i;
-                if(board.getPiece(new Position(numberToRow[row], asciiToColumn[col])) !== null)
-                    return true;
-            } else if(startRow < endRow && startColumn > endColumn) {
-                let col = startColumn - i;
-                let row = startRow + i;
-                if(board.getPiece(new Position(numberToRow[row], asciiToColumn[col])) !== null)
-                    return true;
+                }
+            }
+            }
+        } else {
+            if(Math.abs(startRow - endRow) > Math.abs(startColumn - endColumn)) {
+                distance = Math.abs(startRow - endRow);
+                for (let i = 1; i < distance; i++)
+                {
+                    if(this.invalidVerticalMove(board, startRow, endRow, i)) {
+                        return true;
+                    }
+                }
+            } else {
+                distance = Math.abs(startColumn - endColumn);
+                for (let i = 1; i < distance; i++)
+                {
+                    if(this.invalidHorizontalMove(board, startColumn, endColumn, i)) {
+                        return true;
+                    }
+                }
             }
         }
+        
         return false;
+    }
+
+    invalidRightDiagonalMove(board: Board, startRow:number, startColumn:number,  endRow:number, i:number) {
+        if(startRow > endRow) {
+            const row = startRow - i;
+            const col = startColumn + i;
+            return board.getPiece(new Position(numberToRow[row], asciiToColumn[col])) !== undefined;
+        } else {
+            const row = startRow + i;
+            const col = startColumn + i;
+            return board.getPiece(new Position(numberToRow[row], asciiToColumn[col])) !== undefined;
+        }
+    }
+
+    invalidLeftDiagonalMove(board: Board, startRow:number, startColumn:number,  endRow:number, i:number) {
+        if(startRow > endRow) {
+            const row = startRow - i;
+            const col = startColumn - i;
+            return board.getPiece(new Position(numberToRow[row], asciiToColumn[col])) !== undefined;
+        } else {
+            const row = startRow + i;
+            const col = startColumn - i;
+            return board.getPiece(new Position(numberToRow[row], asciiToColumn[col])) !== undefined;
+        }
+    }
+
+    invalidVerticalMove(board:Board, startRow:number, endRow:number, i:number) {
+        if(startRow > endRow) {
+            let row = startRow - i;
+            return board.getPiece(new Position(numberToRow[row], this.getPosition().getColumn())) !== undefined;
+        } else {
+            let row = startRow + i;
+            return board.getPiece(new Position(numberToRow[row], this.getPosition().getColumn())) !== undefined;
+        }
+    }
+
+    invalidHorizontalMove(board:Board, startColumn:number, endColumn:number, i:number) {
+        if(startColumn > endColumn) {
+            const column = startColumn - i;
+            return board.getPiece(new Position(this.getPosition().getRow(), asciiToColumn[column])) !== undefined;
+        } else {
+            const column = startColumn + i;
+            return board.getPiece(new Position(this.getPosition().getRow(), asciiToColumn[column])) !== undefined;
+        }
     }
 
     validEndPosition(board: Board, endPosition: Position): boolean {
         return board.getPiece(endPosition)?.getColor() !== this.getColor() 
-        || board.getPiece(endPosition) === null;
+        || board.getPiece(endPosition) === undefined;
     }
 
     isValidMove(endPosition: Position): boolean {
