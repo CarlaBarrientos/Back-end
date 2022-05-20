@@ -26,5 +26,5 @@ export default abstract class Piece {
         this.position = position;
     }
     
-    abstract canMove(endPosition: Position): boolean;
+    abstract canMove(board: Board, endPosition: Position): boolean;
 }

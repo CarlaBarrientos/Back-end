@@ -46,12 +46,14 @@ export default class GameService implements IGameService {
     public async movePiece(move: Move, game: Game): Promise<Game> {
         const startPosition = move.getStartPosition();
         const endPosition = move.getEndPosition();
-        const piece = this.getPiece(startPosition, game);
+        const currentBoard = game.getBoard();
+        const piece = currentBoard.getPiece(startPosition);
 
+        this.checkPiece(piece);
         this.checkeGameIsPlaying(game);
         this.checkTurn(move.getPlayer().getColor(), game);
         
-        if(piece.canMove(endPosition)) {
+        if(piece?.canMove(currentBoard, endPosition)) {
             piece.moveTo(endPosition);
             game.changeCurrentTurn();
             game.addMove(move);
@@ -60,39 +62,31 @@ export default class GameService implements IGameService {
         return this._gameRepository.update(game);    
     }
 
-    getPiece(startPosition: Position, game: Game): Piece{
-        const currentBoard: Board = game.getBoard();
-        const piece = currentBoard.getPieces().find((piece) =>
-            piece.getPosition().getRow() === startPosition.getRow()
-            && piece.getPosition().getColumn() === startPosition.getColumn()
-        );
-
+    private checkPiece(piece: Piece | undefined) {
         if(piece === undefined) {
             throw new MissingPieceError();
         }
-
-        return piece;
     }
 
-    checkeGameIsPlaying(game: Game) {
+    private checkeGameIsPlaying(game: Game) {
         if(game.getStatus() !== 'playing'){
             throw new GameNotReadyError()
         }
     }
 
-    checkGameIsWaiting(game: Game){
+    private checkGameIsWaiting(game: Game){
         if(game.getStatus() !== 'waiting') {
             throw new CanNotJoinError(); 
         }
     }
 
-    checkPlayerColor(game: Game, player: Player) {
+    private checkPlayerColor(game: Game, player: Player) {
         if(game.getPlayers()[0].getColor() === player.getColor()) {
             throw new SameColorPlayersError();
         }
     }
 
-    checkTurn(playerColor: Color, game: Game) {
+    private checkTurn(playerColor: Color, game: Game) {
         if(!game.isCurrentTurn(playerColor)) {
             throw new IncorrectTurnError();
         }
