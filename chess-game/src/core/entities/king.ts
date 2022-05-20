@@ -30,11 +30,22 @@ export default class King extends Piece {
 
     checkMate(board: Board, endPosition: Position) {
         let check = false;
-        const blackPieces: Piece[] = board.getBlackPieces();
-        blackPieces.forEach((piece) => {
-            if(piece.canMove(board, endPosition))
-                check = true;
-        });
+        if(this.getColor() === 'white'){
+            const blackPieces: Piece[] = board.getBlackPieces();
+            blackPieces.forEach((piece) => {
+                if(piece.canMove(board, endPosition)) {
+                    check = true;
+                }
+            });
+        } else {
+            const whitePieces: Piece[] = board.getWhitePieces();
+            whitePieces.forEach((piece) => {
+                if(piece.canMove(board, endPosition)){
+                    check = true;
+                }
+            });
+        }
+        
         return check;
     }
 }

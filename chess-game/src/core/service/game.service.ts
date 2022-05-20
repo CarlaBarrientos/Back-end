@@ -46,19 +46,19 @@ export default class GameService implements IGameService {
     public async movePiece(move: Move, game: Game): Promise<Game> {
         const startPosition = move.getStartPosition();
         const endPosition = move.getEndPosition();
-        let currentBoard = game.getBoard();
-        let piece = currentBoard.getPiece(startPosition);
+        const currentBoard = game.getBoard();
+        const piece = currentBoard.getPiece(startPosition);
 
         this.checkPiece(piece);
         this.checkeGameIsPlaying(game);
         this.checkTurn(move.getPlayer().getColor(), game);
         
         if(piece?.canMove(currentBoard, endPosition)) {
-            let newBoard = this.isEating(currentBoard, endPosition);
-            currentBoard.setPieces(newBoard.getPieces());
+            const eatenPiece = piece.canEat(currentBoard, endPosition); 
+            if(eatenPiece !== undefined) {
+                piece.eatPiece(currentBoard, eatenPiece);
+            }
             piece.moveTo(endPosition);
-            
-            //game.getBoard().getPiece(startPosition)?.moveTo(endPosition)
             game.changeCurrentTurn();
             game.addMove(move);
         } else {
@@ -66,15 +66,6 @@ export default class GameService implements IGameService {
         }
 
         return this._gameRepository.update(game);    
-    }
-
-    private isEating(board: Board, endPosition: Position) {
-        const index = board.getPieces().findIndex(piece => piece.getPosition() === endPosition);
-        console.log(index);
-        let a = board.getPieces().splice(index, 1);
-        console.log(board);
-        console.log(a);
-        return board;
     }
 
     private checkPiece(piece: Piece | undefined) {

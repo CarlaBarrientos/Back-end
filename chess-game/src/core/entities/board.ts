@@ -3,7 +3,7 @@ import King from "./king";
 import Knight from "./knight";
 import Pawn from "./pawn";
 import Piece from "./piece";
-import Position from "./position";
+import Position from './position';
 import Queen from "./queen";
 import Rook from "./rook";
 
@@ -22,10 +22,6 @@ export default class Board{
         return this.pieces.filter((piece) => piece.getColor() === 'white');
     }
 
-    setPieces(pieces: Piece[]) {
-        this.pieces = pieces;
-    }
-
     getPieces() {
         return this.pieces;
     }
@@ -34,17 +30,21 @@ export default class Board{
         this.pieces.push(piece);
     }
 
-    getPiece(startPosition: Position): Piece | undefined{
+    removePiece(pieceToRemove: Piece) {
+        let index = this.pieces.indexOf(pieceToRemove);
+        this.pieces.splice(index, 1);
+    }
+
+    getPiece(position: Position): Piece | undefined {
         const piece = this.getPieces().find((piece) =>
-            piece.getPosition().getRow() === startPosition.getRow()
-            && piece.getPosition().getColumn() === startPosition.getColumn()
+            piece.getPosition().getRow() === position.getRow()
+            && piece.getPosition().getColumn() === position.getColumn()
         );
         return piece;
     }
 
     fillBoardWithPieces() {
 
-        this.addPiece(new Rook('white', 'rook', 1, 'A'));
         this.addPiece(new Rook('white', 'rook', 1, 'A'));
         this.addPiece(new Knight('white', 'knight', 1, 'B'));
         this.addPiece(new Bishop('white', 'bishop', 1, 'C'));
@@ -53,7 +53,7 @@ export default class Board{
         this.addPiece(new Bishop('white', 'bishop', 1, 'F'));
         this.addPiece(new Knight('white', 'knight', 1, 'G'));
         this.addPiece(new Rook('white', 'rook', 1, 'H'));
-        this.addPiece(new Pawn('white', 'pawn', 3,'A'));
+        this.addPiece(new Pawn('white', 'pawn', 2,'A'));
         this.addPiece(new Pawn('white', 'pawn', 2,'B'));
         this.addPiece(new Pawn('white', 'pawn', 2,'C'));
         this.addPiece(new Pawn('white', 'pawn', 2,'D'));
