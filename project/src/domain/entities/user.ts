@@ -1,9 +1,9 @@
 export default class User {
     constructor(
-        private _id: number, 
         private _name: string, 
         private _lastname: string, 
-        private _nickname: string) {}
+        private _nickname: string,
+        private _id?: string) {}
     
     get id() {
         return this._id;

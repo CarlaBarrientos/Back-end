@@ -12,7 +12,7 @@ const app = express();
 app.use(bodyParser.json());
 app.use(errorHandler);
 
-const port = 3000;
+const port = 3001;
 
 let server =  new InversifyExpressServer(container, null, {rootPath: '/api'}, app);
 server.setConfig((app) => {

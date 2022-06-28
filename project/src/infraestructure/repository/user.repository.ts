@@ -3,15 +3,34 @@ import IUserRepository from '../../application/repository-interfaces/iuser.repos
 import { UserEntity } from '../database/entities/user.entity';
 import { AppDataSource } from '../database/data-source';
 import User from '../../domain/entities/user';
+import { Repository } from 'typeorm';
 import { UserMapper } from '../../domain/userMapper';
+import { UserNotFoundError } from '../../application/services/errors/errors';
 
 @injectable()
 export default class UserRepository implements IUserRepository {
 
-    async cerateUser(user: UserEntity): Promise<UserEntity> {
-        const userRepository = AppDataSource.getRepository(UserEntity);
-        const userCreated = await userRepository.save(user);
-        return userCreated;
+    private userRepository: Repository<UserEntity>;
+
+    constructor() {
+        this.userRepository = AppDataSource.getRepository(UserEntity);
+    }
+
+    async getUsers(): Promise<UserEntity[]> {
+        return await this.userRepository.find();
     }
     
+    async cerateUser(user: User): Promise<UserEntity> {
+        const userSaved = await this.userRepository.save(UserMapper.toUserEntity(user));
+        return userSaved;
+    }
+
+    async removeUser(ids: string): Promise<UserEntity> {
+        const userEntity = await this.userRepository.findOne({ where:{ id: ids }});
+        if(!userEntity) {
+            throw new UserNotFoundError();
+        } else {
+            return await this.userRepository.remove(userEntity);
+        }
+    }
 }
