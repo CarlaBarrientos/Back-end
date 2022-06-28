@@ -3,12 +3,12 @@ import { UserEntity } from '../infraestructure/database/entities/user.entity';
 import User from './entities/user';
 export class UserMapper {
     static toUserFromEntity(userEntity: UserEntity): User {
-        const user = new User(userEntity.name, userEntity.lastname, userEntity.nickname, userEntity.id);
+        const user = new User(userEntity.name, userEntity.lastname, userEntity.nickname, userEntity.attendance, userEntity.id);
         return user;
     }
 
     static toUserFromDto(userDto: UserDto): User {
-        const user = new User(userDto.name, userDto.lastname, userDto.nickname);
+        const user = new User(userDto.name, userDto.lastname, userDto.nickname, userDto.attendance, userDto.id);
         return user;
     }
 
@@ -16,7 +16,8 @@ export class UserMapper {
         return {
             name: user.name,
             lastname: user.lastname,
-            nickname: user.nickname
+            nickname: user.nickname,
+            attendance: user.attendance!
         }
     }
 
@@ -26,6 +27,7 @@ export class UserMapper {
         userDto.name = user.name;
         userDto.lastname = user.lastname;
         userDto.nickname = user.nickname;
+        userDto.attendance = user.attendance;
         return userDto;
     }
 }

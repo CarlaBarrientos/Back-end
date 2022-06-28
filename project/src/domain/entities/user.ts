@@ -3,6 +3,7 @@ export default class User {
         private _name: string, 
         private _lastname: string, 
         private _nickname: string,
+        private _attendance?: number,
         private _id?: string) {}
     
     get id() {
@@ -19,5 +20,9 @@ export default class User {
 
     get nickname() {
         return this._nickname;
+    }
+    
+    get attendance() {
+        return this._attendance;
     }
 }

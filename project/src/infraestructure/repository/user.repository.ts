@@ -5,7 +5,7 @@ import { AppDataSource } from '../database/data-source';
 import User from '../../domain/entities/user';
 import { Repository } from 'typeorm';
 import { UserMapper } from '../../domain/userMapper';
-import { UserNotFoundError } from '../../application/services/errors/errors';
+import { UserNotFoundError, UserNotValid } from '../../application/services/errors/errors';
 
 @injectable()
 export default class UserRepository implements IUserRepository {
@@ -16,13 +16,18 @@ export default class UserRepository implements IUserRepository {
         this.userRepository = AppDataSource.getRepository(UserEntity);
     }
 
-    async getUsers(): Promise<UserEntity[]> {
-        return await this.userRepository.find();
+    async getUsers(name?: string, nickname?: string): Promise<UserEntity[]> {
+        return await this.userRepository.find({ where: { name: name, nickname: nickname } });
     }
     
     async cerateUser(user: User): Promise<UserEntity> {
-        const userSaved = await this.userRepository.save(UserMapper.toUserEntity(user));
-        return userSaved;
+        if(user.lastname && user.name && user.nickname) {
+            const userSaved = await this.userRepository.save(UserMapper.toUserEntity(user));
+            return userSaved;
+        } else {
+            throw new UserNotValid();
+        }
+        
     }
 
     async removeUser(ids: string): Promise<UserEntity> {

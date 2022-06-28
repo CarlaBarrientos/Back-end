@@ -1,6 +1,7 @@
 export class UserDto {
-    id: string;
+    id?: string;
     name: string; 
     lastname: string; 
     nickname: string;
+    attendance?: number;
 }

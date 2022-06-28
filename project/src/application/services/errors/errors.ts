@@ -18,3 +18,9 @@ export class UserNotFoundError extends BaseError {
 		super('User not found.', HttpStatusCode.NOT_FOUND);
 	}
 }
+
+export class UserNotValid extends BaseError {
+	constructor() {
+		super('Fields can not be empty.', HttpStatusCode.BAD_REQUEST);
+	}
+}

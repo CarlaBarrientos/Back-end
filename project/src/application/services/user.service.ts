@@ -10,8 +10,8 @@ import User from "../../domain/entities/user";
 export default class UserService implements IUserService {
     constructor(@inject(TYPES.IUserRepository) private readonly _userRepository: IUserRepository){}
 
-    async getUsers(): Promise<User[]> {
-        const users = await this._userRepository.getUsers();
+    async getUsers(name?: string, nickname?: string): Promise<User[]> {
+        const users = await this._userRepository.getUsers(name, nickname);
         return users.map((user) => UserMapper.toUserFromEntity(user));
     }
 

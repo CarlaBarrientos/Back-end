@@ -13,4 +13,7 @@ export class UserEntity {
 
     @Column()
     lastname!: string
+
+    @Column({default: 0})
+    attendance: number
 }
