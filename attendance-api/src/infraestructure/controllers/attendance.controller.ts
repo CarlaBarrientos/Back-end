@@ -53,4 +53,15 @@ export default class AttendanceController {
     }
     
   }
+
+  @httpDelete("/users/:userId")
+  public async deleteUserAttendances(@requestParam("userId") userId: string, @request() req: express.Request, @response() res: express.Response) {
+    try {
+      this._attendanceService.removeUserAttendances(userId);
+      res.status(HttpStatusCode.NO_CONTENT);
+    } catch(error: any) {
+      res.status(error.httpCode).send(error);
+    }
+    
+  }
 }

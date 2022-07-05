@@ -1,5 +1,5 @@
 export default interface Attendance {
-    id: string;
+    _id: string;
     fromHour: string;
     toHour: string;
     date: Date;

@@ -6,4 +6,5 @@ export default interface IAttendanceRepository {
     getAttendances(userId?: string): Promise<IAttendance[]>;
     cerateAttendance(attendate: Attendance): Promise<IAttendance>;
     removeAttendance(id: string): Promise<IAttendance>;
+    removeUserAttendances(userId: string): void;
 }

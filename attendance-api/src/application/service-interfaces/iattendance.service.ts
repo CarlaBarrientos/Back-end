@@ -5,4 +5,5 @@ export default interface IAttendanceService {
     getAttendances(userId?: string): Promise<Attendance[]>
     createAttendance(attendance: AttendanceDto): Promise<Attendance>;
     removeAttendance(id: string): Promise<Attendance>;
+    removeUserAttendances(userId: string): void;
 }

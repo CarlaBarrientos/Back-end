@@ -31,4 +31,9 @@ export default class AttendanceService implements IAttendanceService {
         const removedAttendance = await this._attendanceRepository.removeAttendance(id);
         return AttendanceMapper.toAttendanceFromEntity(removedAttendance);
     }
+
+    async removeUserAttendances(userId: string): Promise<void> {
+        this._attendanceRepository.removeUserAttendances(userId);
+    }
+
 }

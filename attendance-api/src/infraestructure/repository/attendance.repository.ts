@@ -39,17 +39,25 @@ export default class AttendanceRepository implements IAttendanceRepository {
     async removeAttendance(id: string): Promise<IAttendance> {
         const objectId = new mongoose.Types.ObjectId(id);
         const attendanceEntity = await AttendanceEntity.findById(objectId).lean();
-        // const attendanceEntity = await this.attendanceRepository.findOne({
-        //     where: { _id: id },
-        //   });
-        // console.log(attendanceEntity)
         if(!attendanceEntity) {
             throw new AttendanceNotFoundError();
         } else {
             return await AttendanceEntity
             .findByIdAndRemove(objectId)
             .lean();
-            //return await this.attendanceRepository.remove(attendanceEntity);
         }
+    }
+
+    async removeUserAttendances(userId: string) {
+        //const attendances = await AttendanceEntity.find({userId: userId}).exec();            
+
+        try {
+            await AttendanceEntity.deleteMany({
+                userId: userId
+            });
+        } catch(error) {
+            throw error;
+        }
+        
     }
 }
