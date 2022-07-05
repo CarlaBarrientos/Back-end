@@ -16,8 +16,8 @@ export default class UserRepository implements IUserRepository {
         this.userRepository = AppDataSource.getRepository(UserEntity);
     }
 
-    async getUsers(name?: string, nickname?: string): Promise<UserEntity[]> {
-        return await this.userRepository.find({ where: { name: name, nickname: nickname } });
+    async getUsers(name?: string, nickname?: string, id?: string): Promise<UserEntity[]> {
+        return await this.userRepository.find({ where: { name: name, nickname: nickname, id: id } });
     }
     
     async cerateUser(user: User): Promise<UserEntity> {

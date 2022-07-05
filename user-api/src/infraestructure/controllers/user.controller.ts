@@ -12,9 +12,9 @@ export default class UserController {
   constructor(@inject(TYPES.IUserService) private readonly _userService: IUserService) { }
 
   @httpGet("/")
-  public async getUser(@queryParam("name") name: string, @queryParam("nickname") nickname: string, @request() req: express.Request, @response() res: express.Response) {
+  public async getUser(@queryParam("name") name: string, @queryParam("nickname") nickname: string, @queryParam("id") id: string, @request() req: express.Request, @response() res: express.Response) {
     try {
-      const users = await this._userService.getUsers(name, nickname);
+      const users = await this._userService.getUsers(name, nickname, id);
       res.status(HttpStatusCode.OK).send(users.map((user) => UserMapper.toDtoFromUser(user)));
     } catch (error: any) {
       res.status(error.httpCode).send(error);
