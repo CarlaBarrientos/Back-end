@@ -24,3 +24,9 @@ export class AttendanceNotValid extends BaseError {
 		super('Fields can not be empty.', HttpStatusCode.BAD_REQUEST);
 	}
 }
+
+export class UserNotFoundError extends BaseError {
+	constructor() {
+		super('User not found.', HttpStatusCode.NOT_FOUND);
+	}
+}

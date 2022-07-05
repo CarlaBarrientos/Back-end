@@ -1,18 +1,18 @@
 import { AttendanceDto } from '../infraestructure/controllers/dtos/attendanceDto';
-import { AttendanceEntity } from '../infraestructure/database/entities/attendance.entity';
+import { IAttendance } from '../infraestructure/database/entities/iattendance.entity';
 import Attendance from './entities/attendance';
 export class AttendanceMapper {
-    static toAttendanceFromEntity(attendanceEntity: AttendanceEntity): Attendance {
-        const attendance = new Attendance(attendanceEntity.fromHour, attendanceEntity.toHour, attendanceEntity.date, attendanceEntity.notes, attendanceEntity.userId, attendanceEntity.id?.toString());
+    static toAttendanceFromEntity(attendanceEntity: IAttendance): Attendance {
+        const attendance = new Attendance(attendanceEntity.fromHour, attendanceEntity.toHour, attendanceEntity.date, attendanceEntity.notes, attendanceEntity.userId, attendanceEntity._id?.toString());
         return attendance;
     }
 
     static toAttendanceFromDto(attendanceDto: AttendanceDto): Attendance {
-        const attendance = new Attendance(attendanceDto.fromHour, attendanceDto.toHour, attendanceDto.date, attendanceDto.notes, attendanceDto.userId, attendanceDto.id);
+        const attendance = new Attendance(attendanceDto.fromHour, attendanceDto.toHour, attendanceDto.date, attendanceDto.notes, attendanceDto.userId, attendanceDto._id);
         return attendance;
     }
 
-    static toAttendanceEntity(attendance: Attendance): AttendanceEntity {
+    static toAttendanceEntity(attendance: Attendance): IAttendance {
         return {
             fromHour: attendance.fromHour,
             toHour: attendance.toHour,
@@ -24,7 +24,7 @@ export class AttendanceMapper {
 
     static toDtoFromAttendance(attendance: Attendance): AttendanceDto {
         const attendanceDto = new AttendanceDto();
-        attendanceDto.id = attendance.id!;
+        attendanceDto._id = attendance.id!;
         attendanceDto.fromHour = attendance.fromHour;
         attendanceDto.toHour = attendance.toHour;
         attendanceDto.date = attendance.date;

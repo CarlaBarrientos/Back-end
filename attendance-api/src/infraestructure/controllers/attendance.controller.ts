@@ -12,10 +12,10 @@ export default class AttendanceController {
   constructor(@inject(TYPES.IAttendanceService) private readonly _attendanceService: IAttendanceService) { }
 
   @httpGet("/")
-  public async getAttendance(@request() req: express.Request, @response() res: express.Response) {
+  public async getAttendance(@queryParam("userId") userId: string, @request() req: express.Request, @response() res: express.Response) {
     try {
-      const attendances = await this._attendanceService.getAttendances();
-      res.status(HttpStatusCode.OK).send(attendances.map((attendance) => AttendanceMapper.toDtoFromAttendance(attendance)));
+      const attendances = await this._attendanceService.getAttendances(userId);
+      res.status(HttpStatusCode.OK).send(attendances.map((attendance) => AttendanceMapper.toDtoFromAttendance(attendance)));    
     } catch (error: any) {
       res.status(error.httpCode).send(error);
     }

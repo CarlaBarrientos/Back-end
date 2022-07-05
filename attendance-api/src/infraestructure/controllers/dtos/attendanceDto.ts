@@ -1,5 +1,5 @@
 export class AttendanceDto {
-    id?: string;
+    _id?: string;
     fromHour: string; 
     toHour: string; 
     date: Date;

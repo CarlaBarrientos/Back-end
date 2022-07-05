@@ -5,7 +5,6 @@ import IUserService from "../service-interfaces/iuser.service";
 import { UserMapper } from '../../domain/userMapper';
 import { UserDto } from "../../infraestructure/controllers/dtos/userDto";
 import User from "../../domain/entities/user";
-import Attendance from "../../domain/entities/attendance";
 import axios from "axios";
 
 @injectable()
