@@ -42,7 +42,7 @@ export default class UserController {
   public async deleteUser(@requestParam("id") id: string, @request() req: express.Request, @response() res: express.Response) {
       const userId = id;
       const removedUser = await this._userService.removeUser(userId);
-      const response = Response.noContent(
+      const response = Response.ok(
         'User Deleted.'
       )
       res.status(response.statusCode).json(response.responseContent);

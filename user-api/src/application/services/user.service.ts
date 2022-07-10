@@ -50,22 +50,31 @@ export default class UserService implements IUserService {
     }
 
     async removeUser(id: string): Promise<User> {
-        const user = await this._userRepository.getUsers(id);
-        if(user.length === 0) {
-            throw new UserNotFoundError();
-        }
-        const removedUser = await this._userRepository.removeUser(user[0]);
-        await this._attendanceService.removeAttendances(id);
-
-        return removedUser;
+        try {
+            const user = await this._userRepository.getUsers(id);
+            if(user.length === 0) {
+                throw new UserNotFoundError();
+            }
+            const removedUser = await this._userRepository.removeUser(user[0]);
+            await this._attendanceService.removeAttendances(id);
+    
+            return removedUser;
+        } catch(error: any) {
+            throw error;
+        }        
     }
 
     async updateAttendance(id: string, attendance: number): Promise<User> {
-        const user = await this._userRepository.getUsers(id);
-        if(user.length === 0) {
-            throw new UserNotFoundError();
+        try {
+            const user = await this._userRepository.getUsers(id);
+            if(user.length === 0) {
+                throw new UserNotFoundError();
+            }
+            const updatedUser = await this._userRepository.updateAttendance(id, attendance);
+            return updatedUser;
+        } catch(error: any) {
+            throw error;
         }
-        const updatedUser = await this._userRepository.updateAttendance(id, attendance);
-        return updatedUser;
+        
     }
 }
