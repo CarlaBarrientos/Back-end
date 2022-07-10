@@ -4,8 +4,8 @@ import { UserEntity } from '../database/entities/user.entity';
 import { AppDataSource } from '../database/data-source';
 import User from '../../domain/entities/user';
 import { Repository } from 'typeorm';
-import { UserMapper } from '../../domain/userMapper';
-import { UserNotFoundError, UserNotValid } from '../../application/services/errors/errors';
+import { UserMapper } from '../userMapper';
+import { UserNotFoundError, UserNotValid } from '../../application/exceptions/errors';
 
 @injectable()
 export default class UserRepository implements IUserRepository {
@@ -30,12 +30,23 @@ export default class UserRepository implements IUserRepository {
         
     }
 
-    async removeUser(ids: string): Promise<UserEntity> {
-        const userEntity = await this.userRepository.findOne({ where:{ id: ids }});
+    async removeUser(userId: string): Promise<UserEntity> {
+        const userEntity = await this.userRepository.findOne({ where:{ id: userId }});
         if(!userEntity) {
             throw new UserNotFoundError();
         } else {
             return await this.userRepository.remove(userEntity);
+        }
+    }
+
+    async updateAttendance(userId: string, attendance: number): Promise<UserEntity> {
+        const userEntity = await this.userRepository.findOne({ where:{ id: userId }});
+        const result = await this.userRepository.update(userId, { attendance: attendance });
+
+        if(!userEntity || result.affected === 0) {
+            throw new UserNotFoundError();
+        } else {
+            return userEntity;
         }
     }
 }

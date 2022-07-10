@@ -1,11 +1,11 @@
 import * as express from 'express';
 import { inject } from "inversify";
-import { controller, httpDelete, httpGet, httpPost, queryParam, request, requestParam, response } from "inversify-express-utils";
-import { TYPES } from "../../domain/types";
+import { controller, httpDelete, httpGet, httpPost, httpPut, queryParam, request, requestParam, response } from "inversify-express-utils";
+import { TYPES } from "../../types";
 import IUserService from '../../application/service-interfaces/iuser.service';
 import { UserDto } from './dtos/userDto';
-import { UserMapper } from '../../domain/userMapper';
-import { HttpStatusCode } from '../../application/services/errors/httpStatusCode';
+import { UserMapper } from '../userMapper';
+import { HttpStatusCode } from '../../application/exceptions/httpStatusCode';
 
 @controller("/users")
 export default class UserController {
@@ -49,6 +49,15 @@ export default class UserController {
     } catch(error: any) {
       res.status(error.httpCode).send(error);
     }
-    
+  }
+
+  @httpPut("/:id")
+  public async updateAttendance(@requestParam("id") id: string, @request() req: express.Request, @response() res: express.Response) {
+    try {
+      const updatedUser = await this._userService.updateAttendance(id, req.body.attendance);
+      res.status(HttpStatusCode.OK).send(UserMapper.toDtoFromUser(updatedUser));
+    } catch(error: any) {
+      res.status(error.httpCode).send(error);
+    }    
   }
 }

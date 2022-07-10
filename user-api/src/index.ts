@@ -4,8 +4,8 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import './infraestructure/controllers/user.controller';
 import { InversifyExpressServer } from "inversify-express-utils";
-import { container } from './application/services/inversify';
-import { errorHandler } from "./application/services/errors/error.handler";
+import { container } from './inversify';
+import { errorHandler } from "./application/exceptions/error.handler";
 
 const app = express();
 

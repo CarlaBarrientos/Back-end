@@ -1,7 +1,7 @@
-import { UserDto } from '../infraestructure/controllers/dtos/userDto';
-import { UserEntity } from '../infraestructure/database/entities/user.entity';
-import Attendance from './entities/attendance';
-import User from './entities/user';
+import { UserDto } from './controllers/dtos/userDto';
+import { UserEntity } from './database/entities/user.entity';
+import Attendance from '../domain/entities/attendance';
+import User from '../domain/entities/user';
 export class UserMapper {
     static toUserFromEntity(userEntity: UserEntity, attendances?: Attendance[]): User {
         const user = new User(userEntity.name, userEntity.lastname, userEntity.nickname, attendances, userEntity.attendance, userEntity.id);
@@ -15,6 +15,7 @@ export class UserMapper {
 
     static toUserEntity(user: User): UserEntity {
         return {
+            id!: user.id,
             name: user.name,
             lastname: user.lastname,
             nickname: user.nickname,

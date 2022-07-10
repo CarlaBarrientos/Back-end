@@ -5,4 +5,5 @@ export default interface IUserService {
     getUsers(name?: string, nickname?: string, id?: string): Promise<User[]>
     createUser(user: UserDto): Promise<User>;
     removeUser(id: string): Promise<User>;
+    updateAttendance(id: string, attendance: number): Promise<User>
 }

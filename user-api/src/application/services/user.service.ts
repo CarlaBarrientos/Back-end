@@ -1,12 +1,11 @@
 import { inject, injectable } from "inversify";
-import { TYPES } from "../../domain/types";
+import { TYPES } from "../../types";
 import IUserRepository from "../repository-interfaces/iuser.repository";
 import IUserService from "../service-interfaces/iuser.service";
-import { UserMapper } from '../../domain/userMapper';
+import { UserMapper } from '../../infraestructure/userMapper';
 import { UserDto } from "../../infraestructure/controllers/dtos/userDto";
 import User from "../../domain/entities/user";
 import axios from "axios";
-import Attendance from "../../domain/entities/attendance";
 
 @injectable()
 export default class UserService implements IUserService {
@@ -28,15 +27,13 @@ export default class UserService implements IUserService {
 
     async removeUser(id: string): Promise<User> {
         await axios.delete(`${process.env.ATTENDANCES_API}/users/${id}`);
-        // if(attendances.length > 0) {
-        //     attendances.forEach(async (attendance: Attendance) => {
-        //         console.log(attendance);
-        //         const response  = await (await axios.delete(`${process.env.ATTENDANCES_API}/${attendance._id}`)).data;
-        //         console.log(response);
-        //     });
-        // }
         const removedUser = await this._userRepository.removeUser(id);
         
         return UserMapper.toUserFromEntity(removedUser);
+    }
+
+    async updateAttendance(id: string, attendance: number): Promise<User> {
+        const updatedUser = await this._userRepository.updateAttendance(id, attendance);
+        return UserMapper.toUserFromEntity(updatedUser);
     }
 }
