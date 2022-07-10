@@ -1,4 +1,4 @@
-import { HttpStatusCode } from "./httpStatusCode";
+import { HttpStatusCode } from "../../domain/httpStatusCode";
 
 export class BaseError extends Error {
 	message!: string;
@@ -12,16 +12,15 @@ export class BaseError extends Error {
 		Error.captureStackTrace(this);
 	}
 }
-
 export class AttendanceNotFoundError extends BaseError {
 	constructor() {
 		super('Attendance not found.', HttpStatusCode.NOT_FOUND);
 	}
 }
 
-export class AttendanceNotValid extends BaseError {
-	constructor() {
-		super('Fields can not be empty.', HttpStatusCode.BAD_REQUEST);
+export class NotEmptyField extends BaseError {
+	constructor(field: string) {
+		super(`${field} field can not be empty.`, HttpStatusCode.BAD_REQUEST);
 	}
 }
 
@@ -30,3 +29,4 @@ export class UserNotFoundError extends BaseError {
 		super('User not found.', HttpStatusCode.NOT_FOUND);
 	}
 }
+

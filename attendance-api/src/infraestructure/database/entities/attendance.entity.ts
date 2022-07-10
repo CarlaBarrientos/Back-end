@@ -1,26 +1,3 @@
-// import { Column, Entity, ObjectID, ObjectIdColumn, PrimaryGeneratedColumn } from "typeorm";
-
-// @Entity()
-// export class AttendanceEntity {
-//     @ObjectIdColumn()
-//     _id?: string
-
-//     @Column()
-//     fromHour!: string
-
-//     @Column()
-//     toHour!: string
-
-//     @Column()
-//     date!: Date
-
-//     @Column()
-//     notes: string
-
-//     @Column()
-//     userId: string
-// }
-
 import mongoose from 'mongoose';
 import { IAttendance } from './iattendance.entity';
 const Schema = mongoose.Schema;
