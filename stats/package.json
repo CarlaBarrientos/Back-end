@@ -1,0 +1,23 @@
+{
+  "name": "stats",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "tsc && node dist/index.js",
+    "start-ts-node": "npx ts-node ./src",
+    "start-nodemon": "nodemon -e ts -w ./src -x npm run start"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "amqplib": "^0.10.0",
+    "axios": "^0.27.2",
+    "dotenv": "^16.0.1",
+    "ts-node": "^10.7.0"
+  },
+  "devDependencies": {
+    "@types/amqplib": "^0.8.2",
+    "nodemon": "^2.0.19"
+  }
+}
