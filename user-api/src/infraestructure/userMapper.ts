@@ -1,10 +1,9 @@
 import { UserDto } from './controllers/dtos/userDto';
 import { UserEntity } from './database/entities/user.entity';
-import Attendance from '../domain/entities/attendance';
 import User from '../domain/entities/user';
 export class UserMapper {
-    static toUserFromEntity(userEntity: UserEntity, attendances?: Attendance[]): User {
-        const user = new User(userEntity.name, userEntity.lastname, userEntity.nickname, attendances, userEntity.attendance, userEntity.id);
+    static toUserFromEntity(userEntity: UserEntity): User {
+        const user = new User(userEntity.name, userEntity.lastname, userEntity.nickname, undefined, userEntity.attendance, userEntity.id);
         return user;
     }
 

@@ -14,4 +14,4 @@ AppDataSource.initialize()
     .then(() => {
         console.log('Database connected.')
     })
-    .catch((error) => console.log(error))
+    .catch((error) => console.log(error));

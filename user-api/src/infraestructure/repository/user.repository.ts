@@ -5,7 +5,6 @@ import { AppDataSource } from '../database/data-source';
 import User from '../../domain/entities/user';
 import { Repository } from 'typeorm';
 import { UserMapper } from '../userMapper';
-import { UserNotFoundError, UserNotValid } from '../../application/exceptions/errors';
 
 @injectable()
 export default class UserRepository implements IUserRepository {
@@ -16,37 +15,42 @@ export default class UserRepository implements IUserRepository {
         this.userRepository = AppDataSource.getRepository(UserEntity);
     }
 
-    async getUsers(name?: string, nickname?: string, id?: string): Promise<UserEntity[]> {
-        return await this.userRepository.find({ where: { name: name, nickname: nickname, id: id } });
-    }
-    
-    async cerateUser(user: User): Promise<UserEntity> {
-        if(user.lastname && user.name && user.nickname) {
-            const userSaved = await this.userRepository.save(UserMapper.toUserEntity(user));
-            return userSaved;
+    async getUsers(id?: string, name?: string, nickname?: string): Promise<User[]> {
+        let users;
+        if(name || nickname || id) {
+            users = await this.userRepository.find({ 
+                where: [ 
+                    {name: name}, 
+                    {nickname: nickname}, 
+                    {id: id}
+                ]
+            });
         } else {
-            throw new UserNotValid();
+            users = await this.userRepository.find();
         }
-        
+        return users.map((user) => {
+            return UserMapper.toUserFromEntity(user)
+        });
     }
 
-    async removeUser(userId: string): Promise<UserEntity> {
-        const userEntity = await this.userRepository.findOne({ where:{ id: userId }});
-        if(!userEntity) {
-            throw new UserNotFoundError();
-        } else {
-            return await this.userRepository.remove(userEntity);
-        }
+    async cerateUser(user: User): Promise<User> {
+        const userSaved = await this.userRepository.save(UserMapper.toUserEntity(user));
+        return UserMapper.toUserFromEntity(userSaved);
     }
 
-    async updateAttendance(userId: string, attendance: number): Promise<UserEntity> {
-        const userEntity = await this.userRepository.findOne({ where:{ id: userId }});
+    async removeUser(userEntity: User): Promise<User> {
+        const deletedUser = await this.userRepository.remove(UserMapper.toUserEntity(userEntity));
+        return UserMapper.toUserFromEntity(deletedUser);
+    }
+
+    async updateAttendance(userId: string, attendance: number): Promise<User> {
         const result = await this.userRepository.update(userId, { attendance: attendance });
 
-        if(!userEntity || result.affected === 0) {
-            throw new UserNotFoundError();
+        if (result.affected! > 0) {
+            const userEntity = await this.userRepository.findOne({ where: { id: userId } });
+            return UserMapper.toUserFromEntity(userEntity!);
         } else {
-            return userEntity;
+            throw new Error('Can not update User.')
         }
     }
 }

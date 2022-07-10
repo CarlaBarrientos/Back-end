@@ -1,4 +1,4 @@
-import { HttpStatusCode } from "./httpStatusCode";
+import { HttpStatusCode } from "../../domain/httpStatusCode";
 
 export class BaseError extends Error {
 	message!: string;
@@ -19,8 +19,8 @@ export class UserNotFoundError extends BaseError {
 	}
 }
 
-export class UserNotValid extends BaseError {
-	constructor() {
-		super('Fields can not be empty.', HttpStatusCode.BAD_REQUEST);
+export class NotEmptyField extends BaseError {
+	constructor(field: string) {
+		super(`${field} field can not be empty.`, HttpStatusCode.BAD_REQUEST);
 	}
 }

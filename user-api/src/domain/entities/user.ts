@@ -32,4 +32,8 @@ export default class User {
     get attendances() {
         return this._attendances;
     }
+
+    set attendances(attendances: Attendance[] | undefined) {
+        this._attendances = attendances;
+      }
 }
